@@ -384,6 +384,21 @@ Pages:
     }
 
     #[test]
+    fn test_in_double_brackets() {
+        let input_text = "[[Where should he go next?]]";
+        let output = in_double_brackets::<(&str, ErrorKind)>(input_text);
+        assert_eq!(output, Ok(("", "Where should he go next?")));
+    }
+
+    #[test]
+    fn test_note(){
+        let input_text = "[[Where should he go next?\nBarcelona?]]\n";
+        let output = note::<(&str, ErrorKind)>(input_text);
+        let expected = Ok(("", Line::Note("Where should he go next?\nBarcelona?".to_owned())));
+        assert_eq!(output, expected);
+    }
+
+    #[test]
     fn test_sd_block() {
         let input_text = "LIBRARIAN\nIs anyone there?\n";
         let output = sd_block::<(&str, ErrorKind)>(input_text);
