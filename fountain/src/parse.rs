@@ -123,6 +123,25 @@ fn lyric<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     let parser = preceded(char('~'), some_line);
     map(context("lyric", parser), |s| Line::Lyric(s.to_owned()))(i)
 }
+
+/// Parses a Note. Notes are wrapped in double brackets '[[]]'.
+/// https://fountain.io/syntax/#notes
+fn note<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    i: &'a str,
+) -> IResult<&'a str, Line, E> {
+    let parser = terminated( in_double_brackets, cut(line_ending));
+    map(context("note", parser), |s: &str| {
+        Line::Note(s.to_string())
+    })(i)
+}
+
+/// Matches "[[x]]" and returns "x"
+fn in_double_brackets<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    i: &'a str,
+) -> IResult<&'a str, &'a str, E> {
+    delimited(tag("[["), is_not("]]"), tag("]]"))(i)
+}
+
 fn titlepage_val<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     i: &'a str,
 ) -> IResult<&'a str, &'a str, E> {
@@ -214,6 +233,7 @@ fn block<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
             map(scene, singleton),
             spd_block,
             sd_block,
+            map(note, singleton),
             map(action, singleton),
         )),
     )(i)
@@ -361,6 +381,21 @@ Pages:
         let input_text = "(gasping)";
         let output = in_parens::<(&str, ErrorKind)>(input_text);
         assert_eq!(output, Ok(("", "gasping")));
+    }
+
+    #[test]
+    fn test_in_double_brackets() {
+        let input_text = "[[Where should he go next?]]";
+        let output = in_double_brackets::<(&str, ErrorKind)>(input_text);
+        assert_eq!(output, Ok(("", "Where should he go next?")));
+    }
+
+    #[test]
+    fn test_note(){
+        let input_text = "[[Where should he go next?\nBarcelona?]]\n";
+        let output = note::<(&str, ErrorKind)>(input_text);
+        let expected = Ok(("", Line::Note("Where should he go next?\nBarcelona?".to_owned())));
+        assert_eq!(output, expected);
     }
 
     #[test]

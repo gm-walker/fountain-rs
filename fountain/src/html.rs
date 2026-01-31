@@ -13,6 +13,7 @@ fn line_as_html(line: &Line) -> String {
         Line::Parenthetical(s) => format!("<p class='parenthetical'>({})</p>", s),
         Line::Transition(s) => format!("<p class='transition'>({})</p>", s),
         Line::Lyric(s) => format!("<p class='lyric'>({})</p>", s),
+        Line::Note(s) => format!("<!--{}-->", s),
     }
 }
 
