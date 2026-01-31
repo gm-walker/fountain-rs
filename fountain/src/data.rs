@@ -33,6 +33,8 @@ pub enum Line {
     Transition(String),
     /// [Lyrics](https://fountain.io/syntax#section-lyrics) are lines starting with a tilde (~).
     Lyric(String),
+    /// [Notes](https://fountain.io/syntax/#notes) are lines that are wrapped in double brackets ([[]]).
+    Note(String),
 }
 
 impl Line {
@@ -56,6 +58,9 @@ impl Line {
     }
     pub fn is_lyric(&self) -> bool {
         matches!(self, Line::Lyric(_))
+    }
+    pub fn is_note(&self) -> bool {
+        matches!(self, Line::Note(_))
     }
 }
 
