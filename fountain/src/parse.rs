@@ -233,6 +233,7 @@ fn block<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
             map(scene, singleton),
             spd_block,
             sd_block,
+            map(note, singleton),
             map(action, singleton),
         )),
     )(i)
