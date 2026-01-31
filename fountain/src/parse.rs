@@ -123,6 +123,23 @@ fn lyric<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     let parser = preceded(char('~'), some_line);
     map(context("lyric", parser), |s| Line::Lyric(s.to_owned()))(i)
 }
+
+fn note<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    i: &'a str,
+) -> IResult<&'a str, Line, E> {
+    let parser = terminated( in_double_brackets, cut(line_ending));
+    map(context("note", parser), |s: &str| {
+        Line::Note(s.to_string())
+    })(i)
+}
+
+/// Matches "[[x]]" and returns "x"
+fn in_double_brackets<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    i: &'a str,
+) -> IResult<&'a str, &'a str, E> {
+    delimited(tag("[["), is_not("]]"), tag("]]"))(i)
+}
+
 fn titlepage_val<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     i: &'a str,
 ) -> IResult<&'a str, &'a str, E> {
