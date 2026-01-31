@@ -124,6 +124,8 @@ fn lyric<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     map(context("lyric", parser), |s| Line::Lyric(s.to_owned()))(i)
 }
 
+/// Parses a Note. Notes are wrapped in double brackets '[[]]'.
+/// https://fountain.io/syntax/#notes
 fn note<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     i: &'a str,
 ) -> IResult<&'a str, Line, E> {

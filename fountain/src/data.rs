@@ -33,7 +33,7 @@ pub enum Line {
     Transition(String),
     /// [Lyrics](https://fountain.io/syntax#section-lyrics) are lines starting with a tilde (~).
     Lyric(String),
-    /// [Notes](https://fountain.io/syntax) are lines that are wrapped in double brackets ([[]]).
+    /// [Notes](https://fountain.io/syntax/#notes) are lines that are wrapped in double brackets ([[]]).
     Note(String),
 }
 
