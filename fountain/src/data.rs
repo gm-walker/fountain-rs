@@ -92,10 +92,12 @@ impl Line {
 #[derive(PartialEq, Eq, Clone, Debug, Default)]
 #[cfg_attr(feature = "use_serde", derive(Serialize, Deserialize))]
 pub struct TitlePage {
-    /// Document author
-    pub author: Option<String>,
     /// Document title
     pub title: Option<String>,
+    /// Credit to document author
+    pub credit: Option<String>,
+    /// Document author
+    pub author: Option<String>,
     /// Other items, stored as a vec of key-value pairs.
     pub other: Vec<(String, String)>,
 }
